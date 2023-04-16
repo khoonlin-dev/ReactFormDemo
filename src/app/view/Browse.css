@@ -1,0 +1,73 @@
+.group-view-header {
+    display: inline-flex;
+    column-gap: 3%;
+    width: 100%;
+}
+
+.group-view-name {
+    max-width: 70%;
+    overflow: hidden;
+    text-align: start;
+}
+
+.group-view-desc {
+    max-width: 70%;
+    width: fit-content;
+    text-align: start;
+}
+
+.group-view-special {
+    height: fit-content;
+    border-radius: 16px;
+    background: #3f58f2;
+    font-size: 12px;
+    padding: 2px 5px 2px 5px;
+    align-self: center;
+}
+
+.rule-list-title,
+.rule-list-item {
+    display: inline-grid;
+    grid-template-columns: 50px 60px 120px 100px 100px 100px 70px 40px;
+
+    column-gap: 5px;
+}
+
+.rule-list-title {
+    font-size: 11px;
+}
+
+.rule-list-item {
+    font-size: 12px;
+}
+
+.button-img:hover {
+    cursor: pointer;
+}
+
+.rule-list-title .rule-id,
+.rule-list-title .rule-field,
+.rule-list-title .rule-operator,
+.rule-list-title .rule-parameter-1,
+.rule-list-title .rule-parameter-2,
+.rule-list-title .rule-parameter-3,
+.rule-list-title .revenue {
+    column-gap: 5px;
+}
+
+.rule-id,
+.rule-field,
+.rule-operator,
+.rule-parameter-1,
+.rule-parameter-2,
+.rule-parameter-3,
+.revenue {
+    display: inline-flex;
+}
+
+.rule-list-item:nth-child(odd) {
+    background-color: #f5f7ff;
+}
+.rule-list-item:nth-child(even) {
+    background-color: #ffffff;
+}
