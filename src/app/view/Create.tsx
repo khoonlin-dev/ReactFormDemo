@@ -14,8 +14,6 @@ import {
     selectRevenueStatus,
 } from "../../state/revenueSlice";
 
-//TODO: Cannot pick the same operator between rules
-
 import {
     Path,
     useForm,
@@ -503,13 +501,28 @@ export default function CreateView(props: CreateViewProps) {
     const formRef = React.useRef<HTMLFormElement>();
 
     const onSubmit: SubmitHandler<RevenueGroup> = async function (data) {
+        const rulesComparison: Record<string, RevenueRule> = {};
+
         // Transform data
         for (let i = 0; i < data.rules.length; i++) {
             const rule = data.rules[i];
+
             rule.parameter = rule.parameter.filter(
                 (param) => param !== undefined && param !== ""
             );
+
+            // Remove duplicated rules
+            // We are sorting params here for comparison purpose.
+            const sortedParam = rule.parameter.slice().sort();
+            const meta = `${rule.field}:${rule.operator}:${sortedParam.join(
+                ":"
+            )}`;
+            if (Object.keys(rulesComparison).indexOf(meta) === -1) {
+                rulesComparison[meta] = rule;
+            }
         }
+        data.rules = Object.values(rulesComparison);
+
         console.log("Uploading");
         //setDisabled(true);
         await dispatch(addGroup(data))

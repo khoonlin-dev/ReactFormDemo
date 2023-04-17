@@ -39,8 +39,6 @@ type GroupViewProps = {
 
 // TODO Fix text area with count's count didnt update after reset / submit
 
-// TODO Disallow remove rule if this is the last rule of the group already
-
 function sortRules({
     rule,
     sortField,
@@ -132,7 +130,9 @@ function RuleListView({
                         return (
                             <div
                                 className="rule-list-item"
-                                key={`${field}-${operator}`}
+                                key={`${field}:${operator}:${parameter.join(
+                                    ":"
+                                )}`}
                             >
                                 <div className={"rule-id"}>{id + 1}</div>
                                 <div className={"rule-field"}>{field}</div>
