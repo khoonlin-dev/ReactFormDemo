@@ -1,5 +1,17 @@
 self.addEventListener("install", (event) => {
-    event.waitUntil(caches.open(MockedServer.fakeDbName));
+    event.waitUntil(
+        caches
+            .open(this.fakeDbName)
+            //.then(function (cache) {
+            //// Populate caches here if you have a manifest... in my case i just want to mock my server rather than pwa
+            //    return;
+            //})
+            .then(() => self.skipWaiting())
+    );
+});
+
+self.addEventListener("activate", (event) => {
+    event.waitUntil(self.clients.claim());
 });
 
 self.addEventListener("fetch", async (event) => {
@@ -69,21 +81,17 @@ const MockedServer = {
                     } else {
                         fullRevenue = [newObject];
                     }
-                    await cache.put(
-                        "revenue",
-                        new Response(JSON.stringify(fullRevenue), {
+                    const newResponse = new Response(
+                        JSON.stringify(fullRevenue),
+                        {
                             status: 200,
                             statusText: "ok",
                             ok: true,
                             redirected: false,
-                        })
+                        }
                     );
-                    return new Response(payload, {
-                        status: 200,
-                        statusText: "ok",
-                        ok: true,
-                        redirected: false,
-                    });
+                    await cache.put("revenue", newResponse.clone());
+                    return newResponse;
                 });
             });
         }

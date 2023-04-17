@@ -6,7 +6,7 @@ import APIClient from "../model/APIClient";
 const initialState: RevenueAppState = {
     current: { name: "", desc: "", special: false, rules: [] },
     groups: [],
-    status: "idle",
+    status: "get:waiting",
 };
 
 export const fetchGroup = createAsyncThunk("revenue/fetchGroup", async () => {
@@ -40,12 +40,14 @@ export const addGroup = createAsyncThunk(
                 onReturn: (response) => {
                     resolve(response);
                 },
-                onError: (e) => {
-                    rejected(e);
+                onError: (_e) => {
+                    //rejected(_e);
+                    // Let the app run on local mode
+                    resolve(group);
                 },
             });
         });
-        return response as RevenueGroup;
+        return response as RevenueGroup | RevenueGroup[];
     }
 );
 
@@ -63,12 +65,14 @@ export const removeGroup = createAsyncThunk(
                 onReturn: (response) => {
                     resolve(response);
                 },
-                onError: (e) => {
-                    rejected(e);
+                onError: (_e) => {
+                    //rejected(_e);
+                    // Let the app run on local mode
+                    resolve(index);
                 },
             });
         });
-        return response as RevenueGroup[];
+        return response as number | RevenueGroup[];
     }
 );
 
@@ -86,12 +90,16 @@ export const removeRule = createAsyncThunk(
                 onReturn: (response) => {
                     resolve(response);
                 },
-                onError: (e) => {
-                    rejected(e);
+                onError: (_e) => {
+                    //rejected(_e);
+                    // Let the app run on local mode
+                    resolve(payload);
                 },
             });
         });
-        return response as RevenueGroup[];
+        return response as
+            | { groupIndex: number; ruleIndex: number }
+            | RevenueGroup[];
     }
 );
 
@@ -222,7 +230,11 @@ export const revenueSlice = createSlice({
             .addCase(addGroup.fulfilled, (state, action) => {
                 const group = action.payload;
                 state.status = "idle";
-                state.groups.push(group);
+                if (Array.isArray(group)) {
+                    state.groups = group;
+                } else {
+                    state.groups.push(group);
+                }
             })
             .addCase(addGroup.rejected, (state) => {
                 state.status = "add:failed";
@@ -233,7 +245,11 @@ export const revenueSlice = createSlice({
             .addCase(removeGroup.fulfilled, (state, action) => {
                 const group = action.payload;
                 state.status = "idle";
-                state.groups = group;
+                if (Array.isArray(group)) {
+                    state.groups = group;
+                } else {
+                    state.groups[group] && state.groups.splice(group, 1);
+                }
             })
             .addCase(removeGroup.rejected, (state) => {
                 state.status = "remove:failed";
@@ -244,7 +260,13 @@ export const revenueSlice = createSlice({
             .addCase(removeRule.fulfilled, (state, action) => {
                 const group = action.payload;
                 state.status = "idle";
-                state.groups = group;
+                if (Array.isArray(group)) {
+                    state.groups = group;
+                } else {
+                    const { ruleIndex, groupIndex } = group;
+                    state.groups[groupIndex]?.rules[ruleIndex] &&
+                        state.groups[groupIndex].rules.splice(ruleIndex, 1);
+                }
             })
             .addCase(removeRule.rejected, (state) => {
                 state.status = "remove:failed";
