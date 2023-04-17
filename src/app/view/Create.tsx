@@ -63,6 +63,7 @@ const TextAreaWithCounter = ({
     register,
     required,
     textAreaProps,
+    getValues,
 }: InputProps & { unregister: UseFormUnregister<RevenueGroup> } & {
     getValues: UseFormGetValues<RevenueGroup>;
 } & {
@@ -73,12 +74,26 @@ const TextAreaWithCounter = ({
         (textAreaProps.value || textAreaProps.defaultValue)?.toString()
             ?.length || 0
     );
+    /**
+     * This part is trouble. React hook form's reset doesn't trigger onchange or oninput,
+     * just the re-render and it changes only whatever's inside the text box without triggering any event.
+     *
+     * Hence without any event to rely on, we have to keep track of any
+     * non-self-updated render and check for the actual form value for best accuracy
+     */
+    const selfRerendered = React.useRef(false);
+    const actualFormLength = (getValues(id) as string)?.length || 0;
+    const shouldUseActualFormLength = !selfRerendered.current;
+    // Set it back because it's a ref
+    selfRerendered.current = false;
+
     const customRef = React.useRef<HTMLTextAreaElement>();
     const { ref, ...rest } = register(id, { required });
     React.useEffect(() => {
         const current = customRef.current;
         if (current) {
             current.oninput = () => {
+                selfRerendered.current = true;
                 setLength(current.value?.length || 0);
             };
         }
@@ -106,7 +121,9 @@ const TextAreaWithCounter = ({
                             width: "99%",
                             bottom: "2%",
                         }}
-                    >{`${length}/${textAreaProps.maxLength}`}</div>
+                    >{`${
+                        shouldUseActualFormLength ? actualFormLength : length
+                    }/${textAreaProps.maxLength}`}</div>
                 ) : undefined}
             </div>
         </>
