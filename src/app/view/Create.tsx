@@ -487,7 +487,7 @@ export default function CreateView(props: CreateViewProps) {
     const { fieldList, operatorList, maxDescLength } = props;
     const status = useAppSelector(selectRevenueStatus);
     const dispatch = useAppDispatch();
-    const disabled = status === "uploading";
+    const disabled = status.endsWith(":waiting");
 
     const {
         register,
@@ -668,23 +668,22 @@ export default function CreateView(props: CreateViewProps) {
                             setError("rules", {
                                 type: "no rules",
                             });
-                            console.log("set error");
                         } else {
                             clearErrors("rules");
-                        }
-
-                        for (let i = 0; i < rules.length; i++) {
-                            const { parameter } = rules[i];
-                            const legitParams = parameter.filter(
-                                (param) => param !== undefined && param !== ""
-                            );
-                            if (legitParams.length === 0) {
-                                setError(`rules.${i}.parameter`, {
-                                    type: "need at least one legit parameter",
-                                });
-                                break;
-                            } else {
-                                clearErrors(`rules.${i}.parameter`);
+                            for (let i = 0; i < rules.length; i++) {
+                                const { parameter } = rules[i];
+                                const legitParams = parameter.filter(
+                                    (param) =>
+                                        param !== undefined && param !== ""
+                                );
+                                if (legitParams.length === 0) {
+                                    setError(`rules.${i}.parameter`, {
+                                        type: "need at least one legit parameter",
+                                    });
+                                    break;
+                                } else {
+                                    clearErrors(`rules.${i}.parameter`);
+                                }
                             }
                         }
                     }}

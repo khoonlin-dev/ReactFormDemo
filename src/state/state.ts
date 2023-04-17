@@ -39,7 +39,14 @@ export interface RevenueGroup {
 export interface RevenueAppState {
     current: RevenueGroup & { rules: Partial<RevenueRule>[] };
     groups: RevenueGroup[];
-    status: "idle" | "loading" | "failed" | "uploading";
+    status:
+        | "idle"
+        | "get:waiting"
+        | "upload:waiting"
+        | "remove:waiting"
+        | "add:failed"
+        | "get:failed"
+        | "remove:failed";
 }
 
 export interface RevenueAppAction {

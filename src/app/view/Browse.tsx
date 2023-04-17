@@ -4,6 +4,7 @@ import {
     removeGroup,
     removeRule,
     selectRevenueGroups,
+    selectRevenueStatus,
 } from "../../state/revenueSlice";
 import {
     LocalizedOperator,
@@ -33,9 +34,12 @@ enum SortOrder {
 type GroupViewProps = {
     onRemoveGroup: () => void;
     onRemoveRule: (id: number) => () => void;
+    disabled: boolean;
 } & RevenueGroup;
 
 // TODO Fix text area with count's count didnt update after reset / submit
+
+// TODO Disallow remove rule if this is the last rule of the group already
 
 function sortRules({
     rule,
@@ -48,14 +52,22 @@ function sortRules({
     return rule.slice();
 }
 
-function SortImageButton({ onClick }: { onClick?: () => void }) {
+function SortImageButton({
+    onClick,
+    disabled,
+}: {
+    onClick?: () => void;
+    disabled: boolean;
+}) {
     return (
         <img
             src={sortImg}
             className="button-img"
             height="16px"
             width="16px"
-            onClick={onClick}
+            onClick={function () {
+                !disabled && onClick && onClick();
+            }}
         ></img>
     );
 }
@@ -63,9 +75,11 @@ function SortImageButton({ onClick }: { onClick?: () => void }) {
 function RuleListView({
     rule,
     onRemoveRule,
+    disabled,
 }: {
     rule: RevenueRule[];
     onRemoveRule: (id: number) => () => void;
+    disabled: boolean;
 }) {
     const [sort, setSort] = React.useState({
         sortField: Sort.Id,
@@ -78,57 +92,36 @@ function RuleListView({
         ...sort,
     });
 
-    // for (let i = 0; i <= rule.length; i++) {
-    //     if (i > endIndex || rateList.length === 0) {
-    //         list.push(
-    //             <div
-    //                 className={"currency-list-item"}
-    //                 key={`empty-filler-${i}`}
-    //             ></div>
-    //         );
-    //     } else {
-    //         const { name, type, unit, value } = rateList[i];
-    //         list.push(
-    //             <div className={"currency-list-item"} key={`currency-${name}`}>
-    //                 <div className={"currency-name"}>{name}</div>
-    //                 <div className={"currency-type"}>{type}</div>
-    //                 <div className={"currency-id"}>{unit}</div>
-    //                 <div className={"currency-value"}>{value.toFixed(3)}</div>
-    //             </div>
-    //         );
-    //     }
-    // }
-
     return (
         <>
             <div className={"rule-list-title"} key={`rule-title`}>
                 <div className={"rule-id"}>
                     <div>{"Rule"}</div>
-                    <SortImageButton />
+                    <SortImageButton disabled={disabled} />
                 </div>
                 <div className={"rule-field"}>
                     <div>{"Field"}</div>
-                    <SortImageButton />
+                    <SortImageButton disabled={disabled} />
                 </div>
                 <div className={"rule-operator"}>
                     <div>{"Operator"}</div>
-                    <SortImageButton />
+                    <SortImageButton disabled={disabled} />
                 </div>
                 <div className={"rule-parameter-1"}>
                     <div>{"Parameter 1"}</div>
-                    <SortImageButton />
+                    <SortImageButton disabled={disabled} />
                 </div>
                 <div className={"rule-parameter-2"}>
                     <div>{"Parameter 2"}</div>
-                    <SortImageButton />
+                    <SortImageButton disabled={disabled} />
                 </div>
                 <div className={"rule-parameter-3"}>
                     <div>{"Parameter 3"}</div>
-                    <SortImageButton />
+                    <SortImageButton disabled={disabled} />
                 </div>
                 <div className={"revenue"}>
                     <div>{"Revenue"}</div>
-                    <SortImageButton />
+                    <SortImageButton disabled={disabled} />
                 </div>
                 <div className={"action"}>{"Action"}</div>
             </div>
@@ -161,8 +154,8 @@ function RuleListView({
                                     height="18px"
                                     width="18px"
                                     style={{ justifySelf: "center" }}
-                                    onClick={() => {
-                                        onRemoveRule(id)();
+                                    onClick={function () {
+                                        !disabled && onRemoveRule(id)();
                                     }}
                                 ></img>
                             </div>
@@ -181,6 +174,7 @@ function GroupView({
     desc,
     special,
     rules,
+    disabled,
 }: GroupViewProps) {
     return (
         <div className="group-view-container">
@@ -201,13 +195,21 @@ function GroupView({
                     alt="Delete group"
                     className="button-img"
                     style={{ alignSelf: "flex-start" }}
-                    onClick={() => {
-                        onRemoveGroup();
-                    }}
+                    onClick={
+                        disabled
+                            ? undefined
+                            : () => {
+                                  onRemoveGroup();
+                              }
+                    }
                 />
             </div>
             <div className="rules-list">
-                <RuleListView rule={rules} onRemoveRule={onRemoveRule} />
+                <RuleListView
+                    rule={rules}
+                    onRemoveRule={onRemoveRule}
+                    disabled={disabled}
+                />
             </div>
         </div>
     );
@@ -216,7 +218,8 @@ function GroupView({
 export default function BrowseView() {
     const groups = useAppSelector(selectRevenueGroups);
     const dispatch = useAppDispatch();
-    // const disabled = status === "uploading";
+    const status = useAppSelector(selectRevenueStatus);
+    const disabled = status.endsWith(":waiting");
 
     return (
         <div className="browse-view">
@@ -227,15 +230,28 @@ export default function BrowseView() {
                         key={`group-${i}-${group.name}`}
                         {...group}
                         onRemoveGroup={function () {
-                            dispatch(removeGroup(group.name));
+                            dispatch(removeGroup(i))
+                                .then(() => {
+                                    // Do nothing
+                                })
+                                .catch((e) => {
+                                    alert("Error!");
+                                });
                         }}
                         onRemoveRule={function (ruleIndex: number) {
                             return function () {
                                 dispatch(
-                                    removeRule({ group: group.name, ruleIndex })
-                                );
+                                    removeRule({ groupIndex: i, ruleIndex })
+                                )
+                                    .then(() => {
+                                        // Do nothing
+                                    })
+                                    .catch((e) => {
+                                        alert("Error!");
+                                    });
                             };
                         }}
+                        disabled={disabled}
                     />
                 );
             })}

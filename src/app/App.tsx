@@ -24,7 +24,7 @@ function App() {
 
     return (
         <div className="App">
-            {status === "loading" ? (
+            {status === "get:waiting" ? (
                 <div>Loading</div>
             ) : (
                 <div className="app-container">
