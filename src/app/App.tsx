@@ -10,7 +10,6 @@ import {
 } from "../state/revenueSlice";
 import CreateView from "./view/Create";
 import { OperatorEnum } from "../state/state";
-import "react-custom-scroll/dist/customScroll.css";
 import BrowseView from "./view/Browse";
 
 const dummyData = {
