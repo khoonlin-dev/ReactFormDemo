@@ -31,7 +31,8 @@ $total-width: 0px;
     $total-width: $total-width + $value;
 }
 
-$total-width: $total-width + (($field-gap + 1px) * (length($field-width) / 2));
+$total-width: $total-width +
+    (($field-gap + 1px) * calc(length($field-width) / 2));
 
 .browse-view {
     width: 65%;

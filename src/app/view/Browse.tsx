@@ -7,7 +7,6 @@ import {
 } from "../../state/revenueSlice";
 import {
     LocalizedOperator,
-    OperatorEnum,
     RevenueGroup,
     RevenueRule,
 } from "../../state/state";
