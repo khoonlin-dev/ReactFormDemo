@@ -16,8 +16,6 @@ import {
 
 //TODO: Cannot pick the same operator between rules
 
-import CustomScroll from "react-custom-scroll";
-
 import {
     Path,
     useForm,
@@ -163,37 +161,32 @@ function RulesBody({
                 </button>
             </div>
             <div className="rules-body">
-                <CustomScroll heightRelativeToParent="100%">
-                    {ref.current.map((rule, i) => {
-                        return (
-                            <RulesContainerView
-                                key={`rules-container-${i}`}
-                                index={i}
-                                register={register}
-                                unregister={unregister}
-                                getValues={getValues}
-                                setValue={setValue}
-                                fieldList={fieldList}
-                                operatorList={operatorList}
-                                disabled={disabled}
-                                onRemoveRule={() => {
-                                    ref.current = getValues(`rules`);
-                                    console.log(`Before deleted. Rules is now`);
-                                    console.log(getValues(`rules`));
-                                    ref.current.splice(i, 1);
-                                    setValue(
-                                        `rules`,
-                                        ref.current as RevenueRule[]
-                                    );
-                                    console.log(`Deleted. Rules is now`);
-                                    console.log(getValues(`rules`));
+                {ref.current.map((rule, i) => {
+                    return (
+                        <RulesContainerView
+                            key={`rules-container-${i}`}
+                            index={i}
+                            register={register}
+                            unregister={unregister}
+                            getValues={getValues}
+                            setValue={setValue}
+                            fieldList={fieldList}
+                            operatorList={operatorList}
+                            disabled={disabled}
+                            onRemoveRule={() => {
+                                ref.current = getValues(`rules`);
+                                console.log(`Before deleted. Rules is now`);
+                                console.log(getValues(`rules`));
+                                ref.current.splice(i, 1);
+                                setValue(`rules`, ref.current as RevenueRule[]);
+                                console.log(`Deleted. Rules is now`);
+                                console.log(getValues(`rules`));
 
-                                    forceUpdate();
-                                }}
-                            />
-                        );
-                    })}
-                </CustomScroll>
+                                forceUpdate();
+                            }}
+                        />
+                    );
+                })}
             </div>
         </>
     );

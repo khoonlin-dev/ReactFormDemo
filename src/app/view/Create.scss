@@ -32,9 +32,7 @@
 
 .rules-body {
     height: 300px;
-}
-
-.rcs-inner-container {
+    overflow: auto;
     mask-image: linear-gradient(
         to bottom,
         transparent 0%,
