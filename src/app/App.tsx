@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import reactLogo from "../assets/react.svg";
 import viteLogo from "/vite.svg";
-import "./App.css";
+import "./App.scss";
 import { useAppDispatch, useAppSelector } from "../state/hooks";
 import {
     fetchGroup,
@@ -28,7 +28,7 @@ function App() {
             {status === "loading" ? (
                 <div>Loading</div>
             ) : (
-                <div style={{ display: "inline-flex", columnGap: "7%" }}>
+                <div className="app-container">
                     <CreateView
                         operatorList={dummyData.operatorList}
                         fieldList={dummyData.fieldList}

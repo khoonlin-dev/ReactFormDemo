@@ -1,3 +1,18 @@
+@import "../App.scss";
+
+.create-view {
+    width: 30%;
+    min-width: $create-min;
+    align-self: flex-start;
+}
+
+@media screen and (max-width: $media-resize-max-width) {
+    .create-view {
+        width: 60%;
+        align-self: center;
+    }
+}
+
 .create-view .form-label {
     display: block;
     width: auto;
@@ -56,20 +71,19 @@
 }
 
 .parameter-holder {
-    width: 40%;
+    width: fit-content;
     display: flex;
     flex-direction: column;
     row-gap: 5px;
 }
 
 .parameter-list {
-    width: 100%;
     display: inline-flex;
     column-gap: 5%;
 }
 
 .paramter-input {
-    width: 80%;
+    width: 70%;
 }
 
 .revenue-container {

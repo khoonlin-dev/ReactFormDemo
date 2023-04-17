@@ -12,7 +12,7 @@ import {
     RevenueRule,
 } from "../../state/state";
 
-import "./Browse.css";
+import "./Browse.scss";
 import deleteGroup from "../../assets/Iconsdelete.svg";
 import sortImg from "../../assets/sort.svg";
 
@@ -185,15 +185,9 @@ function GroupView({
 }: GroupViewProps) {
     return (
         <div className="group-view-container">
-            <div
-                style={{
-                    display: "inline-flex",
-                    width: "100%",
-                    justifyContent: "space-between",
-                }}
-            >
+            <div className="group-view-header">
                 <div style={{ width: "90%" }}>
-                    <div className="group-view-header">
+                    <div className="group-view-title">
                         <div className="group-view-name">{name}</div>
                         {special ? (
                             <div className="group-view-special">
@@ -213,7 +207,7 @@ function GroupView({
                     }}
                 />
             </div>
-            <div className="rulesList">
+            <div className="rules-list">
                 <RuleListView rule={rules} onRemoveRule={onRemoveRule} />
             </div>
         </div>

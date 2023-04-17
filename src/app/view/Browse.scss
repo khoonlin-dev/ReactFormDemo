@@ -1,0 +1,142 @@
+@use "sass:map";
+@import "../App.scss";
+
+$field-width: (
+    "ruleWidth": 50px,
+    "fieldWidth": 60px,
+    "operatorWidth": 120px,
+    "param1Width": 100px,
+    "param2Width": 100px,
+    "param3Width": 100px,
+    "revenueWidth": 70px,
+    "actionWidth": 40px,
+);
+
+$field-gap: 5px;
+
+// $total-width: calc(
+//     map.get($field-width, "ruleWidth")+ map.get($field-width, "fieldWidth")+
+//         map.get($field-width, "operatorWidth")+ map.get(
+//             $field-width,
+//             "param1Width"
+//         )+ map.get($field-width, "param2Width")+ map.get(
+//             $field-width,
+//             "param3Width"
+//         )+ map.get($field-width, "revenueWidth")+ map.get($field-width, "actionWidth")
+// );
+
+$total-width: 0px;
+
+@each $name, $value in $field-width {
+    $total-width: $total-width + $value;
+}
+
+$total-width: $total-width + (($field-gap + 1px) * (length($field-width) / 2));
+
+.browse-view {
+    width: 65%;
+    min-width: $browse-min;
+    align-self: flex-start;
+}
+
+@media screen and (max-width: $media-resize-max-width) {
+    .browse-view {
+        width: 100%;
+        align-self: center;
+    }
+}
+
+.group-view-header {
+    display: inline-flex;
+    max-width: $total-width;
+    width: 100%;
+    justify-content: space-between;
+}
+
+.group-view-title {
+    display: inline-flex;
+    column-gap: 3%;
+    width: 100%;
+}
+
+.group-view-name {
+    max-width: 70%;
+    overflow: hidden;
+    text-align: start;
+}
+
+.group-view-desc {
+    max-width: 70%;
+    width: fit-content;
+    text-align: start;
+}
+
+.group-view-special {
+    height: fit-content;
+    border-radius: 16px;
+    background: #3f58f2;
+    font-size: 12px;
+    padding: 2px 5px 2px 5px;
+    align-self: center;
+}
+
+.rules-list {
+    overflow: auto;
+}
+
+.rule-list-title,
+.rule-list-item {
+    display: inline-grid;
+    grid-template-columns:
+        map.get($field-width, "ruleWidth") map.get($field-width, "fieldWidth") map.get(
+            $field-width,
+            "operatorWidth"
+        )
+        map.get($field-width, "param1Width") map.get(
+            $field-width,
+            "param2Width"
+        )
+        map.get($field-width, "param3Width")
+        map.get($field-width, "revenueWidth") map.get($field-width, "actionWidth");
+    column-gap: 5px;
+    padding: 0px 7px 0px 7px;
+}
+
+.rule-list-title {
+    font-size: 11px;
+}
+
+.rule-list-item {
+    font-size: 12px;
+}
+
+.button-img:hover {
+    cursor: pointer;
+}
+
+.rule-list-title .rule-id,
+.rule-list-title .rule-field,
+.rule-list-title .rule-operator,
+.rule-list-title .rule-parameter-1,
+.rule-list-title .rule-parameter-2,
+.rule-list-title .rule-parameter-3,
+.rule-list-title .revenue {
+    column-gap: 5px;
+}
+
+.rule-id,
+.rule-field,
+.rule-operator,
+.rule-parameter-1,
+.rule-parameter-2,
+.rule-parameter-3,
+.revenue {
+    display: inline-flex;
+}
+
+.rule-list-item:nth-child(odd) {
+    background-color: #f5f7ff;
+}
+.rule-list-item:nth-child(even) {
+    background-color: #ffffff;
+}

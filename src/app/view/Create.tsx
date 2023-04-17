@@ -6,7 +6,7 @@ import {
     RevenueRule,
 } from "../../state/state";
 import React from "react";
-import "./Create.css";
+import "./Create.scss";
 import { useAppDispatch, useAppSelector } from "../../state/hooks";
 import {
     addGroup,
