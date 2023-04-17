@@ -91,6 +91,7 @@ function RuleListView({
         }),
         ...sort,
     });
+    const rulesLength = sortedRules.length;
 
     return (
         <>
@@ -148,16 +149,18 @@ function RuleListView({
                                     {parameter[2] || ""}
                                 </div>
                                 <div className={"revenue"}>{`${revenue}%`}</div>
-                                <img
-                                    className="button-img"
-                                    src={deleteGroup}
-                                    height="18px"
-                                    width="18px"
-                                    style={{ justifySelf: "center" }}
-                                    onClick={function () {
-                                        !disabled && onRemoveRule(id)();
-                                    }}
-                                ></img>
+                                {rulesLength <= 1 ? undefined : (
+                                    <img
+                                        className="button-img"
+                                        src={deleteGroup}
+                                        height="18px"
+                                        width="18px"
+                                        style={{ justifySelf: "center" }}
+                                        onClick={function () {
+                                            !disabled && onRemoveRule(id)();
+                                        }}
+                                    />
+                                )}
                             </div>
                         );
                     }
