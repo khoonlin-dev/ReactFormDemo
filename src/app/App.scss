@@ -3,7 +3,9 @@
 $create-min: 300px;
 $browse-min: 600px;
 $root-padding: 15px;
-$media-resize-max-width: $browse-min + $create-min + ($root-padding * 3);
+$view-gap: 30px;
+$media-resize-max-width: $browse-min + $create-min + ($root-padding * 3) +
+    $view-gap;
 
 $border-color: #bebebe;
 
@@ -55,8 +57,8 @@ $border-color: #bebebe;
     display: flex;
     flex-direction: row;
     width: 100%;
-    column-gap: 30px;
-    justify-content: space-evenly;
+    column-gap: $view-gap;
+    justify-content: center;
 }
 
 .view-title {
@@ -73,6 +75,6 @@ $border-color: #bebebe;
     .app-container {
         flex-direction: column;
         min-width: max($create-min, $browse-min);
-        row-gap: 30px;
+        row-gap: $view-gap;
     }
 }

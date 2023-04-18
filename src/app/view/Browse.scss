@@ -37,19 +37,9 @@ $total-width: $total-width +
     (($field-gap + 1px) * calc(length($field-width) / 2));
 
 .browse-view {
-    width: 65%;
+    width: 43%;
     min-width: $browse-min;
     align-self: flex-start;
-    display: flex;
-    flex-direction: column;
-}
-
-@media screen and (max-width: $media-resize-max-width) {
-    .browse-view {
-        width: 100%;
-        align-self: center;
-        align-items: center;
-    }
 }
 
 .group-view-container {
@@ -178,4 +168,20 @@ $total-width: $total-width +
 .rule-list {
     width: fit-content;
     max-height: 160px;
+}
+
+@media screen and (max-width: $media-resize-max-width) {
+    .browse-view {
+        width: 100%;
+        align-self: center;
+    }
+
+    .browse-view .view-title {
+        text-align: center;
+    }
+
+    .group-view-container {
+        margin-left: auto;
+        margin-right: auto;
+    }
 }
