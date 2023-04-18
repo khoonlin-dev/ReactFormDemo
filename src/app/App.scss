@@ -1,7 +1,8 @@
 // Base Rules
 
 $create-min: 300px;
-$browse-min: 600px;
+$browse-min: 695px;
+$row-browse-min: 600px;
 $root-padding: 15px;
 $view-gap: 30px;
 $media-resize-max-width: $browse-min + $create-min + ($root-padding * 3) +
@@ -74,7 +75,7 @@ $border-color: #bebebe;
 @media screen and (max-width: $media-resize-max-width) {
     .app-container {
         flex-direction: column;
-        min-width: max($create-min, $browse-min);
+        min-width: max($create-min, $row-browse-min);
         row-gap: $view-gap;
     }
 }

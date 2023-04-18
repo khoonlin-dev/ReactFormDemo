@@ -40,6 +40,7 @@ $total-width: $total-width +
     width: 43%;
     min-width: $browse-min;
     align-self: flex-start;
+    padding: 15px 0px;
 }
 
 .group-view-container {
@@ -174,6 +175,7 @@ $total-width: $total-width +
     .browse-view {
         width: 100%;
         align-self: center;
+        min-width: $row-browse-min;
     }
 
     .browse-view .view-title {

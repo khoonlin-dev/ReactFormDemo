@@ -74,7 +74,8 @@ $add-rule-button-border-color: #1859ff;
 }
 
 .rules-body {
-    height: 300px;
+    max-height: 300px;
+    height: auto;
     overflow: auto;
     display: flex;
     flex-direction: column;
@@ -94,13 +95,6 @@ $add-rule-button-border-color: #1859ff;
         black calc(100% - 8px),
         transparent 100%
     );
-}
-
-@media screen and (max-width: $media-resize-max-width) {
-    .rules-body {
-        max-height: 300px;
-        height: auto;
-    }
 }
 
 .rules-outer-container {

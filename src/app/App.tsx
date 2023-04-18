@@ -27,27 +27,31 @@ function App() {
         dispatch(fetchGroup())
             .then((res) => {
                 const { error } = res as { error?: Error };
-                if (error) {
-                    throw error;
-                } else {
-                    return dispatch(getInfo())
-                        .then((res) => {
-                            const { error, payload } = res as {
-                                error?: Error;
-                                payload: APIInfo;
-                            };
-                            if (error) {
-                                throw error;
-                            }
-                            setInfo(payload);
-                        })
-                        .catch((e) => {
-                            alert(e);
-                        });
+                if (error && !navigator.serviceWorker.controller) {
+                    error.cause = "Service Worker";
                 }
+                return dispatch(getInfo())
+                    .then((res) => {
+                        const { error, payload } = res as {
+                            error?: Error;
+                            payload: APIInfo;
+                        };
+                        if (error) {
+                            throw error;
+                        }
+                        setInfo(payload);
+                    })
+                    .catch((e) => {
+                        alert(e);
+                    })
+                    .finally(() => {
+                        if (error) {
+                            throw error;
+                        }
+                    });
             })
-            .catch((e) => {
-                if (!navigator.serviceWorker.controller) {
+            .catch((error: Error) => {
+                if (error.cause === "Service Worker") {
                     if (
                         confirm(
                             "Service worker is installed but not claimed yet. Please reload the page for best experience.\nBy clicking cancel you agree to operate without persistent data"
