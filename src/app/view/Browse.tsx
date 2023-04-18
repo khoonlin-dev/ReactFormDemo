@@ -226,37 +226,41 @@ export default function BrowseView() {
     return (
         <div className="browse-view">
             <div className="view-title">Browse Revenue Group</div>
-            {groups.map((group, i) => {
-                return (
-                    <GroupView
-                        key={`group-${i}-${group.name}`}
-                        {...group}
-                        onRemoveGroup={function () {
-                            dispatch(removeGroup(i))
-                                .then(() => {
-                                    // Do nothing
-                                })
-                                .catch((e) => {
-                                    alert("Error!");
-                                });
-                        }}
-                        onRemoveRule={function (ruleIndex: number) {
-                            return function () {
-                                dispatch(
-                                    removeRule({ groupIndex: i, ruleIndex })
-                                )
+            {groups.length === 0 ? (
+                <div>Nothing to show here</div>
+            ) : (
+                groups.map((group, i) => {
+                    return (
+                        <GroupView
+                            key={`group-${i}-${group.name}`}
+                            {...group}
+                            onRemoveGroup={function () {
+                                dispatch(removeGroup(i))
                                     .then(() => {
                                         // Do nothing
                                     })
                                     .catch((e) => {
                                         alert("Error!");
                                     });
-                            };
-                        }}
-                        disabled={disabled}
-                    />
-                );
-            })}
+                            }}
+                            onRemoveRule={function (ruleIndex: number) {
+                                return function () {
+                                    dispatch(
+                                        removeRule({ groupIndex: i, ruleIndex })
+                                    )
+                                        .then(() => {
+                                            // Do nothing
+                                        })
+                                        .catch((e) => {
+                                            alert("Error!");
+                                        });
+                                };
+                            }}
+                            disabled={disabled}
+                        />
+                    );
+                })
+            )}
         </div>
     );
 }
