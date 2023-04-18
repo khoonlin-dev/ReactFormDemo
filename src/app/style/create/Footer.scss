@@ -1,0 +1,27 @@
+@import "../App.scss";
+
+.create-footer-reset-button {
+    border: 1px solid $border-color;
+    background-color: transparent;
+}
+
+.create-footer-submit-button {
+    border: 1px solid #2d57f6;
+    background-color: #2d57f6;
+    color: white;
+}
+
+.create-footer {
+    width: 98%;
+    display: inline-flex;
+    justify-content: flex-end;
+    column-gap: 10px;
+    height: 35px;
+}
+
+.create-footer button {
+    width: fit-content;
+    padding-left: 10px;
+    padding-right: 10px;
+    border-radius: 8px;
+}

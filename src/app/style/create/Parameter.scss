@@ -1,0 +1,19 @@
+.parameter-holder {
+    width: fit-content;
+    display: flex;
+    flex-direction: column;
+    row-gap: 5px;
+}
+
+.parameter-list {
+    display: inline-flex;
+    column-gap: 5px;
+}
+
+.parameter-input {
+    width: 90%;
+}
+
+.parameter-list .button-img:hover {
+    cursor: pointer;
+}

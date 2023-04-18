@@ -1,20 +1,8 @@
-import React from "react";
-import { useAppDispatch, useAppSelector } from "../../state/hooks";
-import {
-    removeGroup,
-    removeRule,
-    selectRevenueGroups,
-    selectRevenueStatus,
-} from "../../state/revenueSlice";
-import {
-    LocalizedOperator,
-    RevenueGroup,
-    RevenueRule,
-} from "../../state/state";
-
-import "./Browse.scss";
-import deleteGroup from "../../assets/Iconsdelete.svg";
-import sortImg from "../../assets/sort.svg";
+import { useRef, useState } from "react";
+import { LocalizedOperator, RevenueRule } from "../../../state/state";
+import deleteGroup from "../../../assets/Iconsdelete.svg";
+import sortImg from "../../../assets/sort.svg";
+import "../../style/browse/RuleList.scss";
 
 enum Sort {
     Id = 0,
@@ -30,14 +18,6 @@ enum SortOrder {
     Ascending = 0,
     Descending,
 }
-
-type GroupViewProps = {
-    onRemoveGroup: () => void;
-    onRemoveRule: (id: number) => () => void;
-    disabled: boolean;
-} & RevenueGroup;
-
-// TODO Fix text area with count's count didnt update after reset / submit
 
 function sortRules({
     rule,
@@ -136,7 +116,7 @@ const generateOnSort = function (
     };
 };
 
-function RuleListView({
+export default function RuleListView({
     rule,
     onRemoveRule,
     disabled,
@@ -145,11 +125,11 @@ function RuleListView({
     onRemoveRule: (id: number) => () => void;
     disabled: boolean;
 }) {
-    const [sort, setSort] = React.useState({
+    const [sort, setSort] = useState({
         sortField: Sort.Id,
         sortOrder: SortOrder.Ascending,
     });
-    const currentSort = React.useRef({
+    const currentSort = useRef({
         [Sort.Id]: SortOrder.Ascending,
     } as Record<Sort, SortOrder | undefined>);
     const sortedRules = sortRules({
@@ -286,100 +266,5 @@ function RuleListView({
                 )}
             </div>
         </>
-    );
-}
-
-function GroupView({
-    onRemoveGroup,
-    onRemoveRule,
-    name,
-    desc,
-    special,
-    rules,
-    disabled,
-}: GroupViewProps) {
-    return (
-        <div className="group-view-container">
-            <div className="group-view-header">
-                <div className="group-view-header-left-section">
-                    <div className="group-view-title">
-                        <div className="group-view-name">{name}</div>
-                        {special ? (
-                            <div className="group-view-special">
-                                Special Group
-                            </div>
-                        ) : undefined}
-                    </div>
-                    <div className="group-view-desc">{desc}</div>
-                </div>
-                <img
-                    src={deleteGroup}
-                    alt="Delete group"
-                    className="button-img"
-                    onClick={
-                        disabled
-                            ? undefined
-                            : () => {
-                                  onRemoveGroup();
-                              }
-                    }
-                />
-            </div>
-            <div className="rules-list">
-                <RuleListView
-                    rule={rules}
-                    onRemoveRule={onRemoveRule}
-                    disabled={disabled}
-                />
-            </div>
-        </div>
-    );
-}
-
-export default function BrowseView() {
-    const groups = useAppSelector(selectRevenueGroups);
-    const dispatch = useAppDispatch();
-    const status = useAppSelector(selectRevenueStatus);
-    const disabled = status.endsWith(":waiting");
-
-    return (
-        <div className="browse-view">
-            <div className="view-title">Browse Revenue Group</div>
-            {groups.length === 0 ? (
-                <div>Nothing to show here</div>
-            ) : (
-                groups.map((group, i) => {
-                    return (
-                        <GroupView
-                            key={`group-${i}-${group.name}`}
-                            {...group}
-                            onRemoveGroup={function () {
-                                dispatch(removeGroup(i))
-                                    .then(() => {
-                                        // Do nothing
-                                    })
-                                    .catch((e) => {
-                                        alert("Error!");
-                                    });
-                            }}
-                            onRemoveRule={function (ruleIndex: number) {
-                                return function () {
-                                    dispatch(
-                                        removeRule({ groupIndex: i, ruleIndex })
-                                    )
-                                        .then(() => {
-                                            // Do nothing
-                                        })
-                                        .catch((e) => {
-                                            alert("Error!");
-                                        });
-                                };
-                            }}
-                            disabled={disabled}
-                        />
-                    );
-                })
-            )}
-        </div>
     );
 }

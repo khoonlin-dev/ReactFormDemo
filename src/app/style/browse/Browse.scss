@@ -1,0 +1,49 @@
+@import "../App.scss";
+
+$field-width: (
+    "ruleWidth": 50px,
+    "fieldWidth": 60px,
+    "operatorWidth": 120px,
+    "param1Width": 100px,
+    "param2Width": 100px,
+    "param3Width": 100px,
+    "revenueWidth": 70px,
+    "actionWidth": 40px,
+);
+
+$field-gap: 5px;
+
+$computed-width: 689px;
+
+$total-width: 0px;
+
+@each $name, $value in $field-width {
+    $total-width: $total-width + $value;
+}
+
+$total-width: $total-width +
+    (($field-gap + 1px) * calc(length($field-width) / 2));
+
+.browse-view {
+    width: 43%;
+    min-width: $browse-min;
+    align-self: flex-start;
+    padding: 15px 0px;
+}
+
+@media screen and (max-width: $media-resize-max-width) {
+    .browse-view {
+        width: 100%;
+        align-self: center;
+        min-width: $row-browse-min;
+    }
+
+    .browse-view .view-title {
+        text-align: center;
+    }
+
+    .group-view-container {
+        margin-left: auto;
+        margin-right: auto;
+    }
+}

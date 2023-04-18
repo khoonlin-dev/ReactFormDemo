@@ -4,7 +4,6 @@ import {
     APIInfo,
     FieldList,
     LocalizedOperator,
-    OperatorEnum,
     RevenueAppState,
     RevenueGroup,
     RevenueRule,
@@ -18,7 +17,6 @@ const initialState: RevenueAppState = {
 };
 
 export const fetchGroup = createAsyncThunk("revenue/fetchGroup", async () => {
-    //const response = await client.get('/fakeApi/todos');
     const response = await new Promise((resolve, rejected) => {
         APIClient.send("https://api/revenue/get", {
             responseType: "json",

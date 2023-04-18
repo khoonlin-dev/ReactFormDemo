@@ -1,20 +1,16 @@
 import React, { useEffect, useState } from "react";
-import reactLogo from "../assets/react.svg";
-import viteLogo from "/vite.svg";
-import "./App.scss";
+import "./style/App.scss";
 import { useAppDispatch, useAppSelector } from "../state/hooks";
 import {
     fetchGroup,
     getInfo,
-    selectRevenueGroups,
     selectRevenueStatus,
 } from "../state/revenueSlice";
-import CreateView from "./view/Create";
-import { APIInfo, OperatorEnum } from "../state/state";
-import BrowseView from "./view/Browse";
+import CreateView from "./view/create/Create";
+import { APIInfo } from "../state/state";
+import BrowseView from "./view/browse/Browse";
 
 function App() {
-    //const group = useAppSelector(selectRevenueGroups);
     const status = useAppSelector(selectRevenueStatus);
     const dispatch = useAppDispatch();
     const [info, setInfo] = useState<APIInfo>({
@@ -23,53 +19,61 @@ function App() {
         fieldList: [],
     });
 
-    useEffect(() => {
-        dispatch(fetchGroup())
-            .then((res) => {
-                const { error } = res as { error?: Error };
-                if (error && !navigator.serviceWorker.controller) {
-                    error.cause = "Service Worker";
-                }
-                return dispatch(getInfo())
-                    .then((res) => {
-                        const { error, payload } = res as {
-                            error?: Error;
-                            payload: APIInfo;
-                        };
-                        if (error) {
-                            throw error;
-                        }
-                        setInfo(payload);
-                    })
-                    .catch((e) => {
-                        alert(e);
-                    })
-                    .finally(() => {
-                        if (error) {
-                            throw error;
-                        }
-                    });
-            })
-            .catch((error: Error) => {
-                if (error.cause === "Service Worker") {
-                    if (
-                        confirm(
-                            "Service worker is installed but not claimed yet. Please reload the page for best experience.\nBy clicking cancel you agree to operate without persistent data"
-                        )
-                    ) {
-                        location.reload();
-                    } else {
-                        alert(
-                            "So you wanna try and see how this page works without service worker huh..."
-                        );
+    useEffect(
+        () => {
+            dispatch(fetchGroup())
+                .then((res) => {
+                    const { error } = res as { error?: Error };
+                    if (error && !navigator.serviceWorker.controller) {
+                        error.cause = "Service Worker";
                     }
-                }
-            });
-    }, []);
+                    return dispatch(getInfo())
+                        .then((res) => {
+                            const { error, payload } = res as {
+                                error?: Error;
+                                payload: APIInfo;
+                            };
+                            if (error) {
+                                throw error;
+                            }
+                            setInfo(payload);
+                        })
+                        .catch((error) => {
+                            throw error;
+                        })
+                        .finally(() => {
+                            if (error) {
+                                throw error;
+                            }
+                        });
+                })
+                .catch((error: Error) => {
+                    if (error.cause === "Service Worker") {
+                        if (
+                            confirm(
+                                "Service worker is installed but not claimed yet.\nAs SW is used as mocked server in this demo, please reload for best experience.\nBy clicking cancel you agree to operate without persistent data"
+                            )
+                        ) {
+                            location.reload();
+                        } else {
+                            alert(
+                                "So you wanna try and see how this page works without service worker huh..."
+                            );
+                        }
+                    } else {
+                        alert("An error occurred.");
+                        location.reload();
+                    }
+                });
+        },
+        // Empty dependency means componentDidMount
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        []
+    );
 
     return (
         <div className="App">
-            {status === "get:waiting" ? (
+            {status.endsWith(":waiting") ? (
                 <div>Loading</div>
             ) : (
                 <div className="app-container">

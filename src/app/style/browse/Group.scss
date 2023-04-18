@@ -1,0 +1,61 @@
+@import "../App.scss";
+@import "./Browse.scss";
+
+.group-view-container {
+    max-width: fit-content;
+    border-radius: 8px;
+    border: 1px solid $border-color;
+    margin-bottom: 25px;
+}
+
+.group-view-header {
+    display: inline-flex;
+    max-width: $computed-width;
+    width: 100%;
+    justify-content: space-evenly;
+    padding: 10px 0px;
+}
+
+.group-view-header-left-section {
+    width: 90%;
+    display: flex;
+    flex-direction: column;
+    row-gap: 10px;
+}
+
+.group-view-header .button-img {
+    align-self: flex-start;
+    background-color: #f3f3f3;
+    border-radius: 20px;
+    padding: 5px;
+}
+
+.group-view-title {
+    display: inline-flex;
+    column-gap: 10px;
+    width: 100%;
+}
+
+.group-view-name {
+    max-width: 70%;
+    overflow: hidden;
+    text-align: start;
+    font-size: 14px;
+}
+
+.group-view-desc {
+    max-width: 70%;
+    width: fit-content;
+    text-align: start;
+    font-size: 12px;
+}
+
+.group-view-special {
+    height: fit-content;
+    border-radius: 16px;
+    background: #2d57f6;
+    color: #ffffff;
+    font-size: 10px;
+    padding: 2px 5px 2px 5px;
+    align-self: center;
+}
