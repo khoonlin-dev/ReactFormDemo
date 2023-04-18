@@ -182,7 +182,7 @@ function GroupView({
     return (
         <div className="group-view-container">
             <div className="group-view-header">
-                <div style={{ width: "90%" }}>
+                <div className="group-view-header-left-section">
                     <div className="group-view-title">
                         <div className="group-view-name">{name}</div>
                         {special ? (
@@ -197,7 +197,6 @@ function GroupView({
                     src={deleteGroup}
                     alt="Delete group"
                     className="button-img"
-                    style={{ alignSelf: "flex-start" }}
                     onClick={
                         disabled
                             ? undefined
@@ -226,7 +225,7 @@ export default function BrowseView() {
 
     return (
         <div className="browse-view">
-            <h1>Browse Revenue Group</h1>
+            <div className="view-title">Browse Revenue Group</div>
             {groups.map((group, i) => {
                 return (
                     <GroupView

@@ -14,6 +14,10 @@ import {
     selectRevenueStatus,
 } from "../../state/revenueSlice";
 
+import addImg from "../../assets/add.svg";
+import addCircleImg from "../../assets/add_circle_outline.svg";
+import removeCircleImg from "../../assets/remove_circle_outline.svg";
+
 import {
     Path,
     useForm,
@@ -114,14 +118,7 @@ const TextAreaWithCounter = ({
                     }}
                 ></textarea>
                 {textAreaProps.maxLength ? (
-                    <div
-                        style={{
-                            textAlign: "end",
-                            position: "absolute",
-                            width: "99%",
-                            bottom: "2%",
-                        }}
-                    >{`${
+                    <div className="text-area-counter-label">{`${
                         shouldUseActualFormLength ? actualFormLength : length
                     }/${textAreaProps.maxLength}`}</div>
                 ) : undefined}
@@ -158,6 +155,7 @@ function RulesBody({
             <div className="rules-header">
                 <div style={{ alignSelf: "center" }}>Rules</div>
                 <button
+                    className="add-rule-button"
                     type="button"
                     disabled={disabled}
                     onClick={() => {
@@ -172,7 +170,10 @@ function RulesBody({
                         forceUpdate();
                     }}
                 >
-                    Add
+                    <img src={addImg} height={18} width={18}></img>
+                    <div style={{ height: "fit-content", alignSelf: "center" }}>
+                        Add
+                    </div>
                 </button>
             </div>
             <div className="rules-body">
@@ -257,7 +258,7 @@ function ParameterView({
                                     }
                                 )}
                             ></input>
-                            <button
+                            {/* <button
                                 type="button"
                                 disabled={arr.length === 3 || disabled}
                                 onClick={() => {
@@ -269,12 +270,26 @@ function ParameterView({
                                     forceUpdate();
                                 }}
                                 style={{
-                                    width: "5%",
+                                    backgroundColor: "transparent",
+                                    border: "none",
                                     opacity: arr.length < 3 ? 1 : 0,
                                 }}
-                            >
-                                +
-                            </button>
+                            ></button> */}
+                            <img
+                                className="button-img"
+                                src={addCircleImg}
+                                style={{ opacity: arr.length < 3 ? 1 : 0 }}
+                                onClick={function () {
+                                    if (!disabled && arr.length < 3) {
+                                        ref.current =
+                                            getValues(
+                                                `rules.${rulesId}.parameter`
+                                            ) || [];
+                                        ref.current.push("");
+                                        forceUpdate();
+                                    }
+                                }}
+                            ></img>
                         </div>
                     );
                 } else {
@@ -301,10 +316,13 @@ function ParameterView({
                                     }
                                 )}
                             ></input>
-                            <button
+                            {/* <button
                                 type="button"
                                 disabled={disabled}
-                                style={{ width: "5%" }}
+                                style={{
+                                    backgroundColor: "transparent",
+                                    border: "none",
+                                }}
                                 onClick={() => {
                                     ref.current = getValues(
                                         `rules.${rulesId}.parameter`
@@ -322,8 +340,26 @@ function ParameterView({
                                     forceUpdate();
                                 }}
                             >
-                                -
-                            </button>
+                                <img src={removeCircleImg}></img>
+                            </button> */}
+
+                            <img
+                                className="button-img"
+                                src={removeCircleImg}
+                                onClick={function () {
+                                    if (!disabled) {
+                                        ref.current = getValues(
+                                            `rules.${rulesId}.parameter`
+                                        );
+                                        ref.current.splice(i, 1);
+                                        setValue(
+                                            `rules.${rulesId}.parameter`,
+                                            ref.current
+                                        );
+                                        forceUpdate();
+                                    }
+                                }}
+                            ></img>
                         </div>
                     );
                 }
@@ -356,21 +392,22 @@ function RulesContainerView({
                 <button
                     type="button"
                     disabled={disabled}
+                    className="remove-rules-button"
                     onClick={() => {
                         onRemoveRule();
                     }}
                 >
-                    -
+                    X
                 </button>
             </div>
             <div className="rules-inner-container">
-                <div>If</div>
+                <div style={{ paddingTop: "2px" }}>If</div>
                 <select
+                    className="field-select"
                     disabled={disabled}
                     placeholder="Select field"
                     id={`rules.${index}.field`}
                     {...register(`rules.${index}.field`, { required: true })}
-                    style={{ height: "fit-content", width: "20%" }}
                 >
                     <>
                         {fieldList.map((fieldOption) => {
@@ -386,11 +423,11 @@ function RulesContainerView({
                     </>
                 </select>
                 <select
+                    className="operator-select"
                     disabled={disabled}
                     placeholder="Select operator"
                     id={`rules.${index}.operator`}
                     {...register(`rules.${index}.operator`, { required: true })}
-                    style={{ height: "fit-content", width: "20%" }}
                 >
                     <>
                         {operatorList.map((operatorOption) => {
@@ -615,8 +652,9 @@ export default function CreateView(props: CreateViewProps) {
 
     return (
         <div className="create-view">
-            <h1>Create Revenue Group</h1>
+            <div className="view-title">Create Revenue Group</div>
             <form
+                className="create-form"
                 onSubmit={handleSubmit(onSubmit, onInvalid)}
                 onReset={() => {
                     reset({
@@ -628,7 +666,7 @@ export default function CreateView(props: CreateViewProps) {
                 }}
                 ref={formRef as React.LegacyRef<HTMLFormElement>}
             >
-                <div>
+                <div className="input-section">
                     <label htmlFor="name" className="form-label">
                         Group Name
                     </label>
@@ -642,7 +680,7 @@ export default function CreateView(props: CreateViewProps) {
                         disabled={disabled}
                     ></input>
                 </div>
-                <div>
+                <div className="input-section">
                     <TextAreaWithCounter
                         register={register}
                         unregister={unregister}
@@ -659,13 +697,7 @@ export default function CreateView(props: CreateViewProps) {
                         changeColorWhenFull={true}
                     ></TextAreaWithCounter>
                 </div>
-                <div
-                    style={{
-                        display: "flex",
-                        width: "100%",
-                        justifyContent: "flex-start",
-                    }}
-                >
+                <div className="special-checkbox-holder">
                     <input
                         {...register("special")}
                         type="checkbox"
@@ -673,7 +705,9 @@ export default function CreateView(props: CreateViewProps) {
                         name="special"
                         disabled={disabled}
                     ></input>
-                    <label htmlFor="special">Special Group</label>
+                    <label className="special-checkbox-label" htmlFor="special">
+                        Special Group
+                    </label>
                 </div>
                 <RulesBody
                     fieldList={fieldList}
@@ -686,40 +720,47 @@ export default function CreateView(props: CreateViewProps) {
                     setError={setError}
                     clearErrors={clearErrors}
                 />
-                <button type="reset" disabled={disabled}>
-                    Reset
-                </button>
-                <button
-                    type="submit"
-                    disabled={disabled}
-                    onClick={() => {
-                        const rules = getValues("rules");
-                        if (rules === undefined || rules.length === 0) {
-                            setError("rules", {
-                                type: "no rules",
-                            });
-                        } else {
-                            clearErrors("rules");
-                            for (let i = 0; i < rules.length; i++) {
-                                const { parameter } = rules[i];
-                                const legitParams = parameter.filter(
-                                    (param) =>
-                                        param !== undefined && param !== ""
-                                );
-                                if (legitParams.length === 0) {
-                                    setError(`rules.${i}.parameter`, {
-                                        type: "need at least one legit parameter",
-                                    });
-                                    break;
-                                } else {
-                                    clearErrors(`rules.${i}.parameter`);
+                <div className="rules-footer">
+                    <button
+                        type="reset"
+                        className="rules-footer-reset-button"
+                        disabled={disabled}
+                    >
+                        Reset
+                    </button>
+                    <button
+                        className="rules-footer-submit-button"
+                        type="submit"
+                        disabled={disabled}
+                        onClick={() => {
+                            const rules = getValues("rules");
+                            if (rules === undefined || rules.length === 0) {
+                                setError("rules", {
+                                    type: "no rules",
+                                });
+                            } else {
+                                clearErrors("rules");
+                                for (let i = 0; i < rules.length; i++) {
+                                    const { parameter } = rules[i];
+                                    const legitParams = parameter.filter(
+                                        (param) =>
+                                            param !== undefined && param !== ""
+                                    );
+                                    if (legitParams.length === 0) {
+                                        setError(`rules.${i}.parameter`, {
+                                            type: "need at least one legit parameter",
+                                        });
+                                        break;
+                                    } else {
+                                        clearErrors(`rules.${i}.parameter`);
+                                    }
                                 }
                             }
-                        }
-                    }}
-                >
-                    Submit
-                </button>
+                        }}
+                    >
+                        Submit
+                    </button>
+                </div>
             </form>
         </div>
     );
