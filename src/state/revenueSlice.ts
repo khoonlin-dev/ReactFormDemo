@@ -1,6 +1,14 @@
 import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
 import { RootState } from "./store";
-import { RevenueAppState, RevenueGroup, RevenueRule } from "./state";
+import {
+    APIInfo,
+    FieldList,
+    LocalizedOperator,
+    OperatorEnum,
+    RevenueAppState,
+    RevenueGroup,
+    RevenueRule,
+} from "./state";
 import APIClient from "../model/APIClient";
 
 const initialState: RevenueAppState = {
@@ -102,6 +110,22 @@ export const removeRule = createAsyncThunk(
             | RevenueGroup[];
     }
 );
+
+export const getInfo = createAsyncThunk("revenue/getInfo", async () => {
+    // const response = await client.post("/fakeApi/todos", {
+    //     todo: initialTodo,
+    // });
+    const response = await new Promise((resolve, rejected) => {
+        setTimeout(() => {
+            resolve({
+                maxDescLength: 200,
+                fieldList: FieldList,
+                operatorList: Object.keys(LocalizedOperator),
+            });
+        }, 1000);
+    });
+    return response as APIInfo;
+});
 
 export const revenueSlice = createSlice({
     name: "revenue",
@@ -270,6 +294,15 @@ export const revenueSlice = createSlice({
             })
             .addCase(removeRule.rejected, (state) => {
                 state.status = "remove:failed";
+            })
+            .addCase(getInfo.pending, (state) => {
+                state.status = "get_info:waiting";
+            })
+            .addCase(getInfo.fulfilled, (state) => {
+                state.status = "idle";
+            })
+            .addCase(getInfo.rejected, (state) => {
+                state.status = "get_info:failed";
             });
     },
 });

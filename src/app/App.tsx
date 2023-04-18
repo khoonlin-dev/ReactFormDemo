@@ -5,31 +5,45 @@ import "./App.scss";
 import { useAppDispatch, useAppSelector } from "../state/hooks";
 import {
     fetchGroup,
+    getInfo,
     selectRevenueGroups,
     selectRevenueStatus,
 } from "../state/revenueSlice";
 import CreateView from "./view/Create";
-import { OperatorEnum } from "../state/state";
+import { APIInfo, OperatorEnum } from "../state/state";
 import BrowseView from "./view/Browse";
-
-const dummyData = {
-    maxDescLength: 250,
-    fieldList: ["abc", "def", "ghi"],
-    operatorList: [OperatorEnum.CONTAINS, OperatorEnum.IS],
-};
 
 function App() {
     //const group = useAppSelector(selectRevenueGroups);
     const status = useAppSelector(selectRevenueStatus);
     const dispatch = useAppDispatch();
+    const [info, setInfo] = useState<APIInfo>({
+        maxDescLength: 0,
+        operatorList: [],
+        fieldList: [],
+    });
 
     useEffect(() => {
-        // eslint-disable-next-line @typescript-eslint/no-floating-promises
         dispatch(fetchGroup())
             .then((res) => {
                 const { error } = res as { error?: Error };
                 if (error) {
                     throw error;
+                } else {
+                    return dispatch(getInfo())
+                        .then((res) => {
+                            const { error, payload } = res as {
+                                error?: Error;
+                                payload: APIInfo;
+                            };
+                            if (error) {
+                                throw error;
+                            }
+                            setInfo(payload);
+                        })
+                        .catch((e) => {
+                            alert(e);
+                        });
                 }
             })
             .catch((e) => {
@@ -55,11 +69,7 @@ function App() {
                 <div>Loading</div>
             ) : (
                 <div className="app-container">
-                    <CreateView
-                        operatorList={dummyData.operatorList}
-                        fieldList={dummyData.fieldList}
-                        maxDescLength={dummyData.maxDescLength}
-                    />
+                    <CreateView {...info} />
                     <BrowseView />
                 </div>
             )}

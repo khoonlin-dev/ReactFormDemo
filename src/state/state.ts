@@ -10,6 +10,12 @@ export enum OperatorEnum {
     NCONTAINS,
 }
 
+export interface APIInfo {
+    maxDescLength: number;
+    fieldList: string[];
+    operatorList: OperatorEnum[];
+}
+
 // Localized map is for display
 export const LocalizedOperator = {
     [OperatorEnum.IS]: "is",
@@ -21,6 +27,9 @@ export const LocalizedOperator = {
     [OperatorEnum.CONTAINS]: "contains",
     [OperatorEnum.NCONTAINS]: "doesn't contains",
 };
+
+// Mocked API
+export const FieldList = ["aff_sub_1", "aff_sub_2", "aff_sub_3", "aff_sub_4"];
 
 export interface RevenueRule {
     field: string;
@@ -44,6 +53,8 @@ export interface RevenueAppState {
         | "get:waiting"
         | "upload:waiting"
         | "remove:waiting"
+        | "get_info:waiting"
+        | "get_info:failed"
         | "add:failed"
         | "get:failed"
         | "remove:failed";
