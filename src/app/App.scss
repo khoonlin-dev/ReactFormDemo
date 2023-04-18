@@ -55,7 +55,7 @@ $border-color: #bebebe;
     display: flex;
     flex-direction: row;
     width: 100%;
-
+    column-gap: 30px;
     justify-content: space-evenly;
 }
 
@@ -73,5 +73,6 @@ $border-color: #bebebe;
     .app-container {
         flex-direction: column;
         min-width: max($create-min, $browse-min);
+        row-gap: 30px;
     }
 }

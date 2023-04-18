@@ -58,7 +58,7 @@ $add-rule-button-border-color: #1859ff;
 .text-area-counter-label {
     text-align: end;
     position: absolute;
-    width: $text-input-width + 2%;
+    width: $text-input-width + 1%;
     bottom: 4%;
 }
 
@@ -94,6 +94,13 @@ $add-rule-button-border-color: #1859ff;
         black calc(100% - 8px),
         transparent 100%
     );
+}
+
+@media screen and (max-width: $media-resize-max-width) {
+    .rules-body {
+        max-height: 300px;
+        height: auto;
+    }
 }
 
 .rules-outer-container {

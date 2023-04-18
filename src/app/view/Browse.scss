@@ -40,12 +40,15 @@ $total-width: $total-width +
     width: 65%;
     min-width: $browse-min;
     align-self: flex-start;
+    display: flex;
+    flex-direction: column;
 }
 
 @media screen and (max-width: $media-resize-max-width) {
     .browse-view {
         width: 100%;
         align-self: center;
+        align-items: center;
     }
 }
 
