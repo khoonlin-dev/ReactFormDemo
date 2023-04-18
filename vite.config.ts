@@ -31,8 +31,8 @@ export default defineConfig({
                 // I generally think 2 passes are just enough. More is just a waste of performance and could become unsafe
                 passes: 2,
             },
-            // Note: never present a way to better access the underlying code logic in production build
-            sourceMap: false,
         },
+        // Note: never present a way to better access the underlying code logic in production build
+        sourcemap: false,
     },
 });
