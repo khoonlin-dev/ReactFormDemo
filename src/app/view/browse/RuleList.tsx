@@ -49,7 +49,11 @@ export function sortRules({
                 return numberComparison(a.revenue, b.revenue, sortOrder);
             }
             case Sort.Operator: {
-                return numberComparison(a.operator, b.operator, sortOrder);
+                return stringComparison(
+                    LocalizedOperator[a.operator],
+                    LocalizedOperator[b.operator],
+                    sortOrder
+                );
             }
             case Sort.Parameter1: {
                 return stringComparison(
