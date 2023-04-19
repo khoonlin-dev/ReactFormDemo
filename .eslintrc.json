@@ -31,12 +31,6 @@
             "parserOptions": {
                 "project": ["./tsconfig.node.json"]
             }
-        },
-        {
-            "files": ["test/**/*.+(js|jsx|ts|tsx)"],
-            "parserOptions": {
-                "project": ["./tsconfig.test.json"]
-            }
         }
     ]
 }
