@@ -231,7 +231,9 @@ export const revenueSlice = createSlice({
             }
         },
         reset: (state, action: PayloadAction<RevenueAppState>) => {
-            state = action.payload;
+            state.current = action.payload.current;
+            state.groups = action.payload.groups;
+            state.status = action.payload.status;
         },
     },
     extraReducers: (builder) => {

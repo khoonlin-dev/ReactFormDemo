@@ -235,7 +235,6 @@ function RulesContainerView({
                     disabled={disabled}
                     rulesId={index}
                     register={register}
-                    unregister={unregister}
                     getValues={getValues}
                     setValue={setValue}
                 ></ParameterView>
