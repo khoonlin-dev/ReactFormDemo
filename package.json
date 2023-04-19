@@ -5,7 +5,8 @@
     "author": "Cha Khoon Lin",
     "scripts": {
         "dev": "vite",
-        "build": "tsc && yarn vitest run && vite build",
+        "test": "yarn vitest run",
+        "build": "tsc && yarn test && vite build",
         "preview": "vite preview"
     },
     "dependencies": {
