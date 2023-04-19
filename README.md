@@ -9,6 +9,10 @@ This app is built using [React Hook Form](https://react-hook-form.com/) and [Vit
 -   node v16
 -   yarn v1 classic
 
+## Setup
+
+Please run `yarn install` after pulling this repository before building.
+
 ## Feature
 
 ### Create Entry Form
