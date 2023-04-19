@@ -1,8 +1,8 @@
 {
-    "name": "react-form-demo-challenge",
-    "private": true,
+    "name": "involve-test-demo",
     "version": "0.0.0",
     "type": "module",
+    "author": "Cha Khoon Lin",
     "scripts": {
         "dev": "vite",
         "build": "tsc && yarn vitest run && vite build",
