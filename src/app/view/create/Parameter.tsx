@@ -2,21 +2,19 @@ import {
     UseFormGetValues,
     UseFormRegister,
     UseFormSetValue,
-    UseFormUnregister,
 } from "react-hook-form";
 import { RevenueGroup } from "../../../state/state";
 import { useCallback, useRef } from "react";
-import { ReactHookUtils } from "../../../utils/ReactHookUtils";
+import { useForceUpdate } from "../../../utils/ReactHookUtils";
 
 import addCircleImg from "../../../assets/add_circle_outline.svg";
 import removeCircleImg from "../../../assets/remove_circle_outline.svg";
 import "../../style/create/Parameter.scss";
 
 type ParameterViewProps = {
-    disabled: boolean;
+    disabled?: boolean;
     rulesId: number;
     register: UseFormRegister<RevenueGroup>;
-    unregister: UseFormUnregister<RevenueGroup>;
     getValues: UseFormGetValues<RevenueGroup>;
     setValue: UseFormSetValue<RevenueGroup>;
 };
@@ -44,8 +42,8 @@ export default function ParameterView({
 }: ParameterViewProps) {
     const ref = useRef<string[]>([]);
     // Re-apply this every re-render
-    ref.current = getValues(`rules.${rulesId}.parameter`);
-    const forceUpdate = ReactHookUtils.useForceUpdate();
+    ref.current = getValues(`rules.${rulesId}.parameter`) || [];
+    const forceUpdate = useForceUpdate();
     const maxReached = ref.current.length >= 3;
 
     const onAdd = useCallback(
@@ -108,6 +106,7 @@ export default function ParameterView({
                         {isFirst ? (
                             <img
                                 className="button-img"
+                                id="create-parameter"
                                 src={addCircleImg}
                                 style={{ opacity: maxReached ? 0 : 1 }}
                                 onClick={onAdd({
@@ -119,6 +118,7 @@ export default function ParameterView({
                         ) : (
                             <img
                                 className="button-img"
+                                id={`remove-parameter-${i}`}
                                 src={removeCircleImg}
                                 onClick={onDelete({
                                     interactable: !disabled,

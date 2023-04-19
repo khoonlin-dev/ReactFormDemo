@@ -1,16 +1,19 @@
 import React, { useEffect, useState } from "react";
 import "./style/App.scss";
 import { useAppDispatch, useAppSelector } from "../state/hooks";
-import {
+import revenueReducer, {
     fetchGroup,
     getInfo,
     selectRevenueStatus,
+    setName,
 } from "../state/revenueSlice";
 import CreateView from "./view/create/Create";
 import { APIInfo } from "../state/state";
 import BrowseView from "./view/browse/Browse";
 
 function App() {
+    console.log(revenueReducer);
+    console.log(setName);
     const status = useAppSelector(selectRevenueStatus);
     const dispatch = useAppDispatch();
     const [info, setInfo] = useState<APIInfo>({
@@ -25,7 +28,7 @@ function App() {
                 .then((res) => {
                     const { error } = res as { error?: Error };
                     if (error && !navigator.serviceWorker.controller) {
-                        error.cause = "Service Worker";
+                        error.message = "Service Worker";
                     }
                     return dispatch(getInfo())
                         .then((res) => {
@@ -48,7 +51,7 @@ function App() {
                         });
                 })
                 .catch((error: Error) => {
-                    if (error.cause === "Service Worker") {
+                    if (error.message === "Service Worker") {
                         if (
                             confirm(
                                 "Service worker is installed but not claimed yet.\nAs SW is used as mocked server in this demo, please reload for best experience.\nBy clicking cancel you agree to operate without persistent data"

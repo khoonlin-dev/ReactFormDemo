@@ -1,6 +1,6 @@
 import React from "react";
 
-function usePrevious<T>(value: T): T {
+export function usePrevious<T>(value: T): T {
     const ref = React.useRef<T>();
     React.useEffect(() => {
         ref.current = value; //assign the value of ref to the argument
@@ -8,7 +8,7 @@ function usePrevious<T>(value: T): T {
     return ref.current as T; //in the end, return the current ref value.
 }
 
-function useForceUpdate() {
+export function useForceUpdate() {
     return React.useReducer((x: number) => x + 1, 0)[1];
 }
 
@@ -21,14 +21,14 @@ function useForceUpdate() {
  * @param givenError
  * @returns
  */
-function useErrorPropagator(givenError?: Error): (error: Error) => void {
+export function useErrorPropagator(givenError?: Error): (error: Error) => void {
     const [error, setError] = React.useState<Error | null>(null);
     if (givenError != null) throw givenError;
     if (error != null) throw error;
     return setError;
 }
 
-function useErrorHandling<S>(props: {
+export function useErrorHandling<S>(props: {
     /**
      * We expect state will be ever-changing, because we expect this function to be called during re-render, aka "change of state"
      */
@@ -43,7 +43,7 @@ function useErrorHandling<S>(props: {
 ] {
     const { state, onError, onFallback } = props;
     // Keep a list of previous state here for fallback when error happens in child component (which is after state update)
-    const prevState = ReactHookUtils.usePrevious(props.state);
+    const prevState = usePrevious(props.state);
     /**
      * Unfortunately, when an error occurs, with or without error boundary / componentDidCatch,
      * the parent component will be rendered TWICE. Causing 'prevState' to go through multiple render iterations
@@ -77,10 +77,3 @@ function useErrorHandling<S>(props: {
     }, [onFallback]);
     return [errRef, doFallback, handleError(state), handleError(prevState)];
 }
-
-export const ReactHookUtils = {
-    usePrevious,
-    useForceUpdate,
-    useErrorPropagator,
-    useErrorHandling,
-};

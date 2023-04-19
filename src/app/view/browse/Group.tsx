@@ -6,7 +6,7 @@ import "../../style/browse/Group.scss";
 type GroupViewProps = {
     onRemoveGroup: () => void;
     onRemoveRule: (id: number) => () => void;
-    disabled: boolean;
+    disabled?: boolean;
 } & RevenueGroup;
 
 export default function GroupView({

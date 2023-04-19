@@ -1,11 +1,14 @@
 import "../../style/create/Footer.scss";
 
 type CreateFooterProps = {
-    disabled: boolean;
-    onClick: () => void;
+    disabled?: boolean;
+    onSubmit?: () => void;
 };
 
-export default function CreateFooter({ onClick, disabled }: CreateFooterProps) {
+export default function CreateFooter({
+    onSubmit,
+    disabled,
+}: CreateFooterProps) {
     return (
         <div className="create-footer">
             <button
@@ -19,7 +22,7 @@ export default function CreateFooter({ onClick, disabled }: CreateFooterProps) {
                 className="create-footer-submit-button"
                 type="submit"
                 disabled={disabled}
-                onClick={onClick}
+                onClick={onSubmit}
             >
                 Submit
             </button>

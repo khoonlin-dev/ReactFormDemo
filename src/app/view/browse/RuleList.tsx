@@ -19,7 +19,17 @@ enum SortOrder {
     Descending,
 }
 
-function sortRules({
+function stringComparison(a: string, b: string, order: SortOrder): number {
+    if (order) return a < b ? 1 : a === b ? 0 : -1;
+    return a > b ? 1 : a === b ? 0 : -1;
+}
+
+function numberComparison(a: number, b: number, order: SortOrder): number {
+    return order ? b - a : a - b;
+}
+
+// For test purpose
+export function sortRules({
     rule,
     sortField,
     sortOrder,
@@ -30,43 +40,37 @@ function sortRules({
     return rule.slice().sort((a, b) => {
         switch (sortField) {
             case Sort.Id: {
-                return sortOrder ? b.id - a.id : a.id - b.id;
+                return numberComparison(a.id, b.id, sortOrder);
             }
             case Sort.Field: {
-                if (sortOrder)
-                    return a.field < b.field ? 1 : a.field === b.field ? 0 : -1;
-                return a.field > b.field ? 1 : a.field === b.field ? 0 : -1;
+                return stringComparison(a.field, b.field, sortOrder);
             }
             case Sort.Revenue: {
-                return sortOrder
-                    ? b.revenue - a.revenue
-                    : a.revenue - b.revenue;
+                return numberComparison(a.revenue, b.revenue, sortOrder);
             }
             case Sort.Operator: {
-                return sortOrder
-                    ? b.operator - a.operator
-                    : a.operator - b.operator;
+                return numberComparison(a.operator, b.operator, sortOrder);
             }
             case Sort.Parameter1: {
-                const right = a.parameter[0] || "";
-                const left = b.parameter[0] || "";
-                if (sortOrder)
-                    return right < left ? 1 : right === left ? 0 : -1;
-                return right > left ? 1 : right === left ? 0 : -1;
+                return stringComparison(
+                    a.parameter[0] || "",
+                    b.parameter[0] || "",
+                    sortOrder
+                );
             }
             case Sort.Parameter2: {
-                const right = a.parameter[1] || "";
-                const left = b.parameter[1] || "";
-                if (sortOrder)
-                    return right < left ? 1 : right === left ? 0 : -1;
-                return right > left ? 1 : right === left ? 0 : -1;
+                return stringComparison(
+                    a.parameter[1] || "",
+                    b.parameter[1] || "",
+                    sortOrder
+                );
             }
             case Sort.Parameter3: {
-                const right = a.parameter[2] || "";
-                const left = b.parameter[2] || "";
-                if (sortOrder)
-                    return right < left ? 1 : right === left ? 0 : -1;
-                return right > left ? 1 : right === left ? 0 : -1;
+                return stringComparison(
+                    a.parameter[2] || "",
+                    b.parameter[2] || "",
+                    sortOrder
+                );
             }
             default:
                 return 0;
@@ -79,7 +83,7 @@ function SortImageButton({
     disabled,
 }: {
     onClick?: () => void;
-    disabled: boolean;
+    disabled?: boolean;
 }) {
     return (
         <img
@@ -123,7 +127,7 @@ export default function RuleListView({
 }: {
     rule: RevenueRule[];
     onRemoveRule: (id: number) => () => void;
-    disabled: boolean;
+    disabled?: boolean;
 }) {
     const [sort, setSort] = useState({
         sortField: Sort.Id,

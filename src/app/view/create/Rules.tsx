@@ -12,7 +12,7 @@ import {
 } from "../../../state/state";
 import addImg from "../../../assets/add.svg";
 import ParameterView from "./Parameter";
-import { ReactHookUtils } from "../../../utils/ReactHookUtils";
+import { useForceUpdate } from "../../../utils/ReactHookUtils";
 import { useRef } from "react";
 
 import "../../style/create/Rules.scss";
@@ -22,7 +22,7 @@ type RulesViewProps = {
     fieldList: string[];
     operatorList: OperatorEnum[];
     onRemoveRule: () => void;
-    disabled: boolean;
+    disabled?: boolean;
 };
 
 type FormProps = {
@@ -35,13 +35,13 @@ type FormProps = {
 type RulesBodyProps = FormProps & {
     fieldList: string[];
     operatorList: OperatorEnum[];
-    disabled: boolean;
+    disabled?: boolean;
 };
 
 type RulesContainerViewProps = RulesViewProps & FormProps;
 
 type RulesRevenueViewProps = {
-    disabled: boolean;
+    disabled?: boolean;
     index: number;
     register: UseFormRegister<RevenueGroup>;
     setValue: UseFormSetValue<RevenueGroup>;
@@ -51,7 +51,7 @@ function AddRulesButton({
     disabled,
     onClick,
 }: {
-    disabled: boolean;
+    disabled?: boolean;
     onClick: () => void;
 }) {
     return (
@@ -75,7 +75,7 @@ function AddRulesButton({
  */
 export default function RulesBody(props: RulesBodyProps) {
     const { getValues, setValue, disabled } = props;
-    const forceUpdate = ReactHookUtils.useForceUpdate();
+    const forceUpdate = useForceUpdate();
     const ref = useRef<Partial<RevenueRule>[]>([]);
 
     ref.current = getValues(`rules`) || [];

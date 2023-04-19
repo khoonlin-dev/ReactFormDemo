@@ -1,6 +1,5 @@
-/* eslint-disable @typescript-eslint/no-misused-promises */
 import { OperatorEnum, RevenueGroup, RevenueRule } from "../../../state/state";
-import { useCallback, useRef } from "react";
+import { RefObject, useCallback, useRef } from "react";
 import "../../style/create/Create.scss";
 import { useAppDispatch, useAppSelector } from "../../../state/hooks";
 import { addGroup, selectRevenueStatus } from "../../../state/revenueSlice";
@@ -219,7 +218,12 @@ export default function CreateView(props: CreateViewProps) {
             <div className="view-title">Create Revenue Group</div>
             <form
                 className="create-form"
-                onSubmit={handleSubmit(onSubmit, onInvalid)}
+                onSubmit={
+                    handleSubmit(
+                        onSubmit,
+                        onInvalid
+                    ) as React.FormEventHandler<HTMLFormElement>
+                }
                 onReset={() => {
                     reset({
                         name: "",
@@ -282,7 +286,7 @@ export default function CreateView(props: CreateViewProps) {
                     getValues={getValues}
                     setValue={setValue}
                 />
-                <CreateFooter disabled={disabled} onClick={customValidation} />
+                <CreateFooter disabled={disabled} onSubmit={customValidation} />
             </form>
         </div>
     );
