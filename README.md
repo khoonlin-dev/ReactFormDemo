@@ -2,6 +2,8 @@
 
 This app is built using [React Hook Form](https://react-hook-form.com/) and [Vite](https://vitejs.dev/) (I really like its hmr very much).
 
+![Screenshot](/docs/screenshot.png)
+
 ## Dev Requirement
 
 -   node v16
